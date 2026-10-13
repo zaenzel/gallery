@@ -5,8 +5,10 @@ yang bekerja di repo ini. **Baca file ini sebelum menulis kode.** Detail ada di 
 
 ## Ringkasan proyek
 
-Template frontend berbasis **Next.js (App Router) + TypeScript strict**, dengan struktur
-**feature-based**. Fitur `products` adalah contoh referensi lengkap — tiru polanya untuk fitur baru.
+**Ardi Gallery**: situs galeri foto pribadi Ardi yang sudah dipublikasikan, penuh foto, animasi,
+dan komponen 3D. Dibangun dari template frontend **Next.js (App Router) + TypeScript strict**
+dengan struktur **feature-based**. Fitur `gallery` adalah fitur utama — baca bagian
+"Khusus proyek ini" di bawah sebelum mengubahnya.
 
 | Kebutuhan                          | Pakai                                     | Jangan pakai                                 |
 | ---------------------------------- | ----------------------------------------- | -------------------------------------------- |
@@ -38,8 +40,7 @@ Package manager: **pnpm**. Jangan pakai npm/yarn, jangan commit lockfile lain.
 ```
 src/
 ├── app/                 ROUTING SAJA. page.tsx tipis, memanggil komponen dari features/.
-│   ├── (dashboard)/     route group (tidak masuk URL), berbagi layout
-│   └── api/             route handler. Saat ini berisi MOCK API untuk contoh.
+│   └── page.tsx         SATU-SATUNYA halaman: hero 3D → lembar kontak → galeri
 ├── features/<nama>/     LOGIKA BISNIS per domain
 │   ├── api/             fungsi fetch + hook TanStack Query + query-keys.ts
 │   ├── components/      komponen milik fitur (smart *-container.tsx & dumb)
@@ -58,7 +59,7 @@ src/
 ├── providers/           provider global (QueryClientProvider, dll)
 ├── types/               tipe global (Paginated, ApiError)
 ├── styles/globals.css   design token Tailwind
-└── mocks/               data mock. Hapus saat backend asli tersedia.
+└── mocks/photos.ts      DATA DUMMY foto (Picsum). Ganti dengan foto asli.
 ```
 
 ## Aturan WAJIB
@@ -99,12 +100,70 @@ Aturan bertanda 🔒 dijaga oleh ESLint (`pnpm lint` akan gagal).
 
 ## Alur kerja umum
 
-- **Fitur baru** → ikuti `docs/adding-a-feature.md` (contoh lengkap: `src/features/products`).
-- **Halaman baru** → buat `src/app/<route>/page.tsx`, render container dari fitur.
+- **Fitur baru** → ikuti `docs/adding-a-feature.md`.
+- **Konten baru** → tambahkan section di `src/app/page.tsx` (situs ini satu halaman).
 - **Komponen shadcn baru** → `pnpm dlx shadcn@latest add <nama>` (config di `components.json`).
 - **Env variable baru** → tambahkan ke `src/config/env.ts` (schema + `runtimeEnv`) dan `.env.example`.
-- **Sambungkan ke backend asli** → set `NEXT_PUBLIC_API_URL`, hapus `src/mocks/` dan
-  `src/app/api/products/`.
+- **Ganti foto dummy dengan foto asli** → lihat "Data galeri" di bawah.
+
+## Khusus proyek ini
+
+### Konsep desain: meja cahaya
+
+Situs meniru meja cahaya fotografer: permukaan bercahaya dingin, slide foto berbingkai putih,
+strip film dengan nomor frame, dan lingkaran pensil grease merah untuk menandai pilihan.
+
+- **Satu tema terang saja.** Tidak ada dark mode; latar bercahaya adalah identitasnya.
+- **Merah grease (`text-grease`/`bg-grease`) HANYA untuk menandai pilihan/keadaan aktif**
+  (frame pilihan, seri aktif, halaman aktif, fokus). Jangan dipakai sebagai warna dekorasi.
+- **Amber film (`text-film`)** hanya untuk nomor frame dan cetakan tepi film.
+- **Tipografi:** `font-display` (Big Shoulders, condensed) untuk nama, judul, dan nomor frame;
+  `font-sans` (Hanken Grotesk) untuk teks. Ukuran besar memakai token `text-display`,
+  `text-headline`, `text-title`.
+- **Hindari:** label huruf kapital di atas judul, pemisah titik tengah (`A · B`), panah di teks
+  tombol, animasi fade-up di setiap section. Gerakan otomatis cukup satu momen per halaman.
+
+### Data galeri
+
+- Semua data foto lewat `src/features/gallery/api/get-photos.ts` (`getPhotos`, `getSeries`,
+  `getContactSheet`). Saat ini membaca `src/mocks/photos.ts`.
+- Konten galeri statis, jadi diambil di **Server Component** (halaman di-prerender) dan tidak
+  memakai TanStack Query.
+- Untuk foto asli: taruh file di `public/photos/` dan ubah `src` di `src/mocks/photos.ts`, atau
+  ganti isi `get-photos.ts` agar membaca CMS. Lalu hapus izin Picsum di `next.config.ts`.
+  Komponen tidak perlu diubah.
+- `width`/`height` foto WAJIB sesuai rasio aslinya — dipakai untuk layout grid dan 3D.
+
+### Satu halaman
+
+- Situs ini **sengaja satu halaman** (`src/app/page.tsx`). Jangan menambah route baru; konten
+  baru menjadi section di halaman itu.
+- Tiap section punya `id` (`lembar-kontak`, `galeri`) dan `scroll-mt-16` supaya tidak tertutup
+  header. Jarak antar-section memakai **margin**, bukan padding, agar anchor mendarat di judul.
+- Navigasi di `siteConfig.nav` berupa anchor (`#galeri`). Header menandai section yang sedang
+  dibaca secara otomatis. Lenis menangani scroll halus untuk anchor.
+
+### State di URL
+
+- `/?seri=<slug>` = filter seri, `/?foto=<id>` = lightbox terbuka.
+  Keduanya bisa dibagikan sebagai link. Navigasi yang mengubah param ini memakai
+  `scroll: false` supaya posisi baca tidak loncat. Komponen yang membaca `useSearchParams`
+  harus berada di dalam `<Suspense>`.
+
+### Aturan 3D (React Three Fiber)
+
+- Semua komponen 3D ada di `src/features/gallery/components/three/` dan **dimuat lewat
+  `next/dynamic` dengan `ssr: false`** dari komponen pembungkusnya, supaya Three.js tidak
+  memperlambat render awal.
+- `Slide` adalah satu-satunya objek foto 3D. Tata letak ditentukan parent lewat `getTarget`
+  (posisi tujuan per frame); slide bergerak halus ke sana.
+- **Animasi per frame memakai ref + `useFrame`, bukan `useState`** (state memicu re-render 60x/detik).
+- Tekstur memakai `optimizedImageUrl()` (lewat optimizer Next, same-origin, WebP kecil).
+- **Wajib menghormati `usePrefersReducedMotion()`**: tanpa animasi pembuka, tanpa putaran otomatis,
+  tanpa goyangan.
+- Interaksi 3D harus punya padanan keyboard (carousel: panah kiri/kanan) dan label aksesibel.
+- Halaman berisi lebih dari satu `<Canvas>`: setiap scene memakai `useInView` dan
+  `frameloop={inView ? 'always' : 'never'}` supaya scene yang tidak terlihat berhenti merender.
 
 ## Definition of done
 

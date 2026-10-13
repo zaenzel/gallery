@@ -1,21 +1,31 @@
-import Link from 'next/link';
-
-import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
+import {
+  GallerySection,
+  getContactSheet,
+  getPhotos,
+  getSeries,
+  HomeContactSection,
+  HomeHero,
+} from '@/features/gallery';
 
-export default function HomePage() {
+/** Satu-satunya halaman: hero 3D → lembar kontak → galeri. */
+export default async function HomePage() {
+  const [photos, series, contactSheet] = await Promise.all([
+    getPhotos(),
+    getSeries(),
+    getContactSheet(9),
+  ]);
+
   return (
-    <section className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-20">
-      <h1 className="text-4xl font-semibold tracking-tight">{siteConfig.name}</h1>
-      <p className="max-w-xl text-muted-foreground">
-        Template frontend dengan struktur feature-based. Buka contoh fitur Produk untuk melihat alur
-        lengkap: komponen → hook → fungsi API → api-client.
-      </p>
-      <div>
-        <Link href="/products" className={buttonVariants()}>
-          Lihat contoh fitur
-        </Link>
-      </div>
-    </section>
+    <>
+      <HomeHero
+        ownerName={siteConfig.owner}
+        photos={photos.slice(0, 8)}
+        photoCount={photos.length}
+        seriesCount={series.length}
+      />
+      <HomeContactSection photos={contactSheet} totalCount={photos.length} />
+      <GallerySection photos={photos} series={series} />
+    </>
   );
 }

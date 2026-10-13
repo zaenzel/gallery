@@ -2,9 +2,11 @@ import { env } from './env';
 
 export const siteConfig = {
   name: env.NEXT_PUBLIC_APP_NAME,
-  description: 'Frontend template: Next.js, TypeScript, Tailwind, TanStack Query.',
+  owner: 'Ardi',
+  description: 'Galeri foto Ardi: karya yang sudah dipublikasikan, disusun per seri.',
+  /** Satu halaman: navigasi berupa anchor ke id section. */
   nav: [
-    { label: 'Beranda', href: '/' },
-    { label: 'Produk', href: '/products' },
+    { label: 'Lembar kontak', href: '#lembar-kontak' },
+    { label: 'Galeri', href: '#galeri' },
   ],
 } as const;

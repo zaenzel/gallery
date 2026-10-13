@@ -1,6 +1,7 @@
 # Menambah fitur baru
 
-Contoh: membuat fitur `orders`. Referensi lengkap: `src/features/products`.
+Contoh: membuat fitur `orders` yang mengambil data dari backend lewat TanStack Query.
+Untuk konten statis (seperti galeri), lihat pola `src/features/gallery`.
 
 ## 1. Struktur folder
 
@@ -65,8 +66,8 @@ export function useOrders(params: OrderListParams = {}) {
 }
 ```
 
-Mutation: lihat `features/products/api/create-product.ts` (invalidate `orderKeys.lists()` di
-`onSuccess`).
+Mutation: buat `create-order.ts` dengan `useMutation`, lalu invalidate `orderKeys.lists()` di
+`onSuccess`.
 
 ## 5. Komponen dumb → container
 
@@ -85,7 +86,7 @@ export { OrderListContainer } from './components/order-list-container';
 export type { Order, OrderStatus } from './types/order';
 ```
 
-## 7. Halaman — `src/app/(dashboard)/orders/page.tsx`
+## 7. Halaman — `src/app/orders/page.tsx`
 
 ```tsx
 import { PageHeader } from '@/components/common/page-header';
@@ -116,14 +117,3 @@ Tambahkan link di `src/config/site.ts` (`nav`) jika perlu.
 - [ ] Komponen dumb tidak memanggil hook data/store
 - [ ] Teks UI Bahasa Indonesia, loading/error/empty state tertangani
 - [ ] `pnpm check` lolos
-
-## Menghapus contoh `products`
-
-Jika tidak dibutuhkan di proyek baru:
-
-```bash
-rm -rf src/features/products src/mocks "src/app/(dashboard)/products" src/app/api/products e2e/products.spec.ts
-```
-
-Lalu hapus link "Produk" di `src/config/site.ts` dan tombol di `src/app/page.tsx`.
-Simpan dulu sebagai referensi sampai fitur pertama proyek selesai dibuat.

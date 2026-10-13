@@ -11,7 +11,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   },
   client: {
-    NEXT_PUBLIC_APP_NAME: z.string().min(1).default('FE Template'),
+    NEXT_PUBLIC_APP_NAME: z.string().min(1).default('Ardi Gallery'),
     // Default `/api` mengarah ke mock API bawaan (src/app/api). Ganti ke URL backend asli.
     NEXT_PUBLIC_API_URL: z.string().min(1).default('/api'),
   },

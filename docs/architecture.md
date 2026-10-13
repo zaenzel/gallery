@@ -86,9 +86,8 @@ Jangan menyalin data server ke Zustand — itu membuat dua sumber kebenaran.
 - Error 4xx tidak di-retry (lihat `lib/query-client.ts`).
 - Error render yang tak tertangani ditangkap `app/error.tsx`.
 
-## Mock API
+## Data dummy
 
-`src/app/api/products/route.ts` + `src/mocks/products-db.ts` meniru backend agar contoh bisa
-jalan tanpa server lain. Kontraknya (`Paginated<T>`, body error `{ message }`) sengaja dibuat mirip
-backend REST umum. Saat backend asli siap: set `NEXT_PUBLIC_API_URL`, hapus kedua lokasi tersebut,
-dan sesuaikan `types/api.ts` dengan kontrak backend.
+`src/mocks/photos.ts` berisi foto dummy dari picsum.photos beserta judul rekaan, dibaca oleh
+`src/features/gallery/api/get-photos.ts`. Saat foto asli siap, ganti data di file itu atau ubah
+`get-photos.ts` agar membaca CMS/backend. Lihat bagian "Data galeri" di `AGENTS.md`.

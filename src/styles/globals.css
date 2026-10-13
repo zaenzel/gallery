@@ -1,39 +1,31 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens (gaya shadcn/ui). Ubah warna brand di sini, bukan di komponen.
- * Komponen memakai class seperti `bg-primary`, `text-muted-foreground`.
+ * Design tokens — konsep "meja cahaya" (light table).
+ * Situs ini sengaja satu tema terang: permukaan bercahaya adalah identitasnya.
+ * Ubah warna di :root saja; komponen hanya memakai nama token (bg-background, text-grease, dst).
  */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.01 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.01 260);
-  --muted: oklch(0.967 0.003 260);
-  --muted-foreground: oklch(0.55 0.02 260);
-  --primary: oklch(0.45 0.16 264);
-  --primary-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.58 0.22 27);
-  --success: oklch(0.6 0.15 150);
-  --border: oklch(0.92 0.004 260);
-  --ring: oklch(0.45 0.16 264 / 0.4);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(0.16 0.01 260);
-    --foreground: oklch(0.96 0.003 260);
-    --card: oklch(0.2 0.01 260);
-    --card-foreground: oklch(0.96 0.003 260);
-    --muted: oklch(0.26 0.01 260);
-    --muted-foreground: oklch(0.7 0.015 260);
-    --primary: oklch(0.7 0.14 264);
-    --primary-foreground: oklch(0.16 0.01 260);
-    --destructive: oklch(0.68 0.19 25);
-    --success: oklch(0.72 0.15 150);
-    --border: oklch(0.3 0.01 260);
-    --ring: oklch(0.7 0.14 264 / 0.45);
-  }
+  /* permukaan meja cahaya */
+  --background: #e6ecee;
+  /* tinta slate untuk teks utama */
+  --foreground: #1b2228;
+  /* bingkai slide (mount) */
+  --card: #f4f7f8;
+  --card-foreground: #1b2228;
+  --muted: #d3dbdf;
+  /* teks sekunder — kontras ≥ 4.5:1 terhadap background */
+  --muted-foreground: #4f5c64;
+  --primary: #1b2228;
+  --primary-foreground: #f4f7f8;
+  /* merah pensil grease: HANYA untuk menandai pilihan/aktif */
+  --grease: #d3263a;
+  /* amber tepi film: nomor frame */
+  --film: #b8761a;
+  --destructive: #d3263a;
+  --success: #2f7d5b;
+  --border: #b9c4ca;
+  --ring: #d3263a;
 }
 
 @theme inline {
@@ -45,16 +37,40 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-grease: var(--grease);
+  --color-film: var(--film);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-border: var(--border);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Big Shoulders Variable', 'Arial Narrow', sans-serif;
+
+  /* skala tipe modular (rasio ~1.333) */
+  --text-display: clamp(9rem, 31vw, 30rem);
+  --text-headline: clamp(4.5rem, 14vw, 12rem);
+  --text-title: clamp(2rem, 4vw, 3rem);
+}
+
+html {
+  background: var(--background);
 }
 
 body {
-  background: var(--background);
+  /* cahaya dari bawah meja: sedikit lebih terang di tengah */
+  background: radial-gradient(120% 80% at 50% 35%, #f1f5f6 0%, transparent 60%), var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'tnum';
+}
+
+::selection {
+  background: var(--grease);
+  color: var(--card);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
 }

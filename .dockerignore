@@ -1,0 +1,31 @@
+# Dependency & hasil build lokal (di-install dan di-build ulang di dalam Docker)
+
+node_modules
+.next
+
+# Git & tooling lokal
+
+.git
+.github
+.husky
+.vscode
+.claude
+
+# Rahasia (env asli nggak boleh masuk image)
+
+.env
+.env.*
+!.env.example
+
+# Log & sampah OS
+
+*.log
+.DS_Store
+
+# Dokumen yang nggak dipakai build
+
+docs
+README.md
+AGENTS.md
+CLAUDE.md
+GEMINI.md
