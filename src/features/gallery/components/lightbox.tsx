@@ -61,7 +61,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
       role="dialog"
       aria-modal="true"
       aria-label={photo.title}
-      className="fixed inset-0 z-50 flex flex-col bg-foreground text-card"
+      className="fixed inset-0 z-50 flex flex-col bg-overlay text-overlay-foreground"
       initial={reducedMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -70,7 +70,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
       <div className="flex items-center justify-between px-5 py-4 sm:px-8">
         <p className="font-display text-lg font-semibold tracking-wider text-film">
           ▸ {photo.frame}
-          <span className="ml-3 font-sans text-sm font-normal tracking-normal text-card/60">
+          <span className="ml-3 font-sans text-sm font-normal tracking-normal text-overlay-foreground/60">
             {index + 1} dari {count}
           </span>
         </p>
@@ -79,7 +79,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
           type="button"
           onClick={onClose}
           aria-label="Tutup"
-          className="p-2 text-card/80 transition-colors hover:text-card"
+          className="p-2 text-overlay-foreground/80 transition-colors hover:text-overlay-foreground"
         >
           <X className="size-6" />
         </button>
@@ -111,7 +111,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
             prev();
           }}
           aria-label="Foto sebelumnya"
-          className="absolute top-1/2 left-1 -translate-y-1/2 p-3 text-card/70 transition-colors hover:text-card sm:left-4"
+          className="absolute top-1/2 left-1 -translate-y-1/2 p-3 text-overlay-foreground/70 transition-colors hover:text-overlay-foreground sm:left-4"
         >
           <ChevronLeft className="size-8" />
         </button>
@@ -122,7 +122,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
             next();
           }}
           aria-label="Foto berikutnya"
-          className="absolute top-1/2 right-1 -translate-y-1/2 p-3 text-card/70 transition-colors hover:text-card sm:right-4"
+          className="absolute top-1/2 right-1 -translate-y-1/2 p-3 text-overlay-foreground/70 transition-colors hover:text-overlay-foreground sm:right-4"
         >
           <ChevronRight className="size-8" />
         </button>
@@ -130,7 +130,7 @@ export function Lightbox({ photos, index, onClose, onNavigate, reducedMotion }: 
 
       <div className="flex flex-col gap-1 px-5 py-5 sm:flex-row sm:items-baseline sm:justify-between sm:px-8">
         <h2 className="font-display text-3xl leading-none font-bold sm:text-4xl">{photo.title}</h2>
-        <p className="flex gap-4 text-sm text-card/70">
+        <p className="flex gap-4 text-sm text-overlay-foreground/70">
           <span>Seri {photo.series.title}</span>
           <span>
             {photo.place}, {photo.year}

@@ -36,7 +36,7 @@ export function ContactSheet({ photos, perStrip = 3 }: ContactSheetProps) {
         <div
           key={s}
           className={cn(
-            'bg-foreground px-2 pt-7 pb-6 shadow-[0_18px_30px_-22px_rgb(27_34_40/0.6)] sm:px-3',
+            'bg-strip px-2 pt-7 pb-6 shadow-[0_18px_30px_-22px_rgb(27_34_40/0.6)] sm:px-3',
             STRIP_TILT[s % STRIP_TILT.length],
           )}
         >
@@ -69,7 +69,7 @@ export function ContactSheet({ photos, perStrip = 3 }: ContactSheetProps) {
                       sizes="(min-width: 640px) 33vw, 78vw"
                       className="object-cover transition-[filter,transform] duration-500 group-hover:scale-[1.03] group-hover:brightness-110"
                     />
-                    <span className="absolute inset-x-0 bottom-0 translate-y-full bg-foreground/85 px-3 py-2 text-xs text-card transition-transform duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0">
+                    <span className="absolute inset-x-0 bottom-0 translate-y-full bg-overlay/85 px-3 py-2 text-xs text-overlay-foreground transition-transform duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0">
                       {photo.title}, {photo.year}
                     </span>
                   </Link>

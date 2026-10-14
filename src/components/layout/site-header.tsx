@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 
+import { ThemeToggle } from './theme-toggle';
+
 /** Id section yang ditunjuk oleh link navigasi (`#galeri` → `galeri`). */
 const sectionIds = siteConfig.nav.map((item) => item.href.replace('#', ''));
 
@@ -54,42 +56,45 @@ export function SiteHeader() {
         <a href="#konten" className="font-display text-2xl leading-none font-extrabold">
           {siteConfig.owner}
         </a>
-        <nav aria-label="Navigasi utama" className="flex gap-6 text-sm">
-          {siteConfig.nav.map((item) => {
-            const isActive = active === item.href.replace('#', '');
-            return (
-              <a
-                key={item.href}
-                href={item.href}
-                aria-current={isActive ? 'true' : undefined}
-                className={cn(
-                  'relative py-1 transition-colors',
-                  isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                {item.label}
-                {isActive ? (
-                  // goresan pensil grease di bawah section aktif
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 100 8"
-                    preserveAspectRatio="none"
-                    className="absolute -bottom-0.5 left-0 h-1.5 w-full text-grease"
-                  >
-                    <path
-                      d="M1 5.5 C 22 2, 48 6.5, 70 3.5 S 92 4, 99 2.5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      vectorEffect="non-scaling-stroke"
-                    />
-                  </svg>
-                ) : null}
-              </a>
-            );
-          })}
-        </nav>
+        <div className="flex items-center gap-5">
+          <nav aria-label="Navigasi utama" className="flex gap-6 text-sm">
+            {siteConfig.nav.map((item) => {
+              const isActive = active === item.href.replace('#', '');
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={cn(
+                    'relative py-1 transition-colors',
+                    isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {item.label}
+                  {isActive ? (
+                    // goresan pensil grease di bawah section aktif
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 100 8"
+                      preserveAspectRatio="none"
+                      className="absolute -bottom-0.5 left-0 h-1.5 w-full text-grease"
+                    >
+                      <path
+                        d="M1 5.5 C 22 2, 48 6.5, 70 3.5 S 92 4, 99 2.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </svg>
+                  ) : null}
+                </a>
+              );
+            })}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

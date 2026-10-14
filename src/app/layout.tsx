@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { SiteHeader } from '@/components/layout/site-header';
 import { siteConfig } from '@/config/site';
+import { themeInitScript } from '@/lib/theme';
 import { AppProviders } from '@/providers/app-providers';
 
 import '@fontsource-variable/big-shoulders';
@@ -15,12 +16,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#e6ecee',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#e6ecee' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f1418' },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="id" className="h-full antialiased">
+    // suppressHydrationWarning: script tema mengisi data-theme sebelum React hydrate.
+    <html lang="id" className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <AppProviders>
           <a

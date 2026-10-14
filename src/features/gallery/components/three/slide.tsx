@@ -5,6 +5,8 @@ import { type ThreeEvent, useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
 
+import { useTheme } from '@/hooks/use-theme';
+
 /** Material milik drei <Image>: uniform bisa diubah langsung per frame. */
 type ImageMaterial = THREE.ShaderMaterial & {
   opacity: number;
@@ -55,6 +57,9 @@ export function Slide({
   damping = 0.12,
   doubleSided = false,
 }: SlideProps) {
+  const { theme } = useTheme();
+  // bayangan slide: gelap pekat di tema gelap, slate di tema terang
+  const shadowColor = theme === 'dark' ? '#000000' : '#1b2228';
   const side = doubleSided ? THREE.DoubleSide : THREE.FrontSide;
   const group = useRef<THREE.Group>(null);
   const image = useRef<THREE.Mesh>(null);
@@ -113,7 +118,7 @@ export function Slide({
       <mesh ref={shadow} position={[0.05, -0.07, -0.03]}>
         <planeGeometry args={[width + MOUNT * 2, height + MOUNT * 2]} />
         <meshBasicMaterial
-          color="#1b2228"
+          color={shadowColor}
           transparent
           opacity={0}
           depthWrite={false}

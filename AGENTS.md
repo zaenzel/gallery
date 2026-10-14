@@ -113,7 +113,7 @@ Aturan bertanda 🔒 dijaga oleh ESLint (`pnpm lint` akan gagal).
 Situs meniru meja cahaya fotografer: permukaan bercahaya dingin, slide foto berbingkai putih,
 strip film dengan nomor frame, dan lingkaran pensil grease merah untuk menandai pilihan.
 
-- **Satu tema terang saja.** Tidak ada dark mode; latar bercahaya adalah identitasnya.
+- **Dua tema: terang ("meja cahaya") dan gelap ("kamar gelap").** Lihat bagian _Tema_ di bawah.
 - **Merah grease (`text-grease`/`bg-grease`) HANYA untuk menandai pilihan/keadaan aktif**
   (frame pilihan, seri aktif, halaman aktif, fokus). Jangan dipakai sebagai warna dekorasi.
 - **Amber film (`text-film`)** hanya untuk nomor frame dan cetakan tepi film.
@@ -122,6 +122,24 @@ strip film dengan nomor frame, dan lingkaran pensil grease merah untuk menandai 
   `text-headline`, `text-title`.
 - **Hindari:** label huruf kapital di atas judul, pemisah titik tengah (`A · B`), panah di teks
   tombol, animasi fade-up di setiap section. Gerakan otomatis cukup satu momen per halaman.
+
+### Tema (terang / gelap)
+
+- Tema diatur atribut `data-theme="light|dark"` di `<html>`. Script kecil di `<head>`
+  (`themeInitScript` di `src/lib/theme.ts`) mengisinya sebelum halaman tampil, dari pilihan di
+  `localStorage` atau, jika belum memilih, dari setelan sistem. Jangan memindahkan logika ini ke
+  `useEffect` (akan berkedip).
+- **Warna hanya lewat token** di `src/styles/globals.css`: nilai terang di `:root`, nilai gelap di
+  `[data-theme='dark']`. Komponen memakai nama token (`bg-background`, `text-muted-foreground`),
+  **bukan** `dark:` untuk warna dan bukan hex. Menambah warna baru = tambah token di kedua blok.
+- Token khusus: `strip` (dasar strip film, gelap di kedua tema), `overlay` /
+  `overlay-foreground` (lightbox), `glow` (cahaya latar). Jangan pakai `bg-foreground` untuk
+  permukaan yang harus tetap gelap; nilainya terbalik di tema gelap.
+- Varian `dark:` hanya untuk hal yang bukan warna token (mis. menukar ikon matahari/bulan).
+- Komponen React yang perlu tahu tema (mis. warna bayangan di 3D) memakai `useTheme()` dari
+  `src/hooks/use-theme.ts`. Tombol ganti tema: `components/layout/theme-toggle.tsx`.
+- Merah grease dan amber film punya nilai lebih cerah di tema gelap; pertahankan kontras ≥ 4.5:1
+  untuk teks.
 
 ### Data galeri
 

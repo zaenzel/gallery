@@ -46,6 +46,10 @@ Komponen dan halaman tidak perlu disentuh.
 Semua warna, font, dan ukuran tipe ada di `src/styles/globals.css`. Merah pensil (`grease`)
 khusus untuk menandai pilihan dan keadaan aktif.
 
+**Tema terang/gelap:** mengikuti setelan sistem, dan bisa diganti lewat tombol di header
+(pilihan tersimpan di browser). Nilai warna gelap ada di blok `[data-theme='dark']` pada file
+yang sama.
+
 ## Perintah
 
 | Perintah      | Fungsi                       |

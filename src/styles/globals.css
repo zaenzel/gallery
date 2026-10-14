@@ -26,7 +26,48 @@
   --success: #2f7d5b;
   --border: #b9c4ca;
   --ring: #d3263a;
+  /* dasar strip film (selalu gelap, di kedua tema) */
+  --strip: #1b2228;
+  /* lightbox: layar gelap penuh dan teks di atasnya */
+  --overlay: #1b2228;
+  --overlay-foreground: #f4f7f8;
+  /* cahaya lembut di tengah meja (gradien latar body) */
+  --glow: #f1f5f6;
+  color-scheme: light;
 }
+
+/*
+ * Tema gelap — "kamar gelap": permukaan meja cahaya dimatikan, slide tetap menyala.
+ * Aktif lewat atribut data-theme="dark" di <html> (diatur script di app/layout.tsx
+ * sebelum halaman tampil, supaya tidak berkedip). Hanya nilai token yang berubah;
+ * komponen tidak perlu tahu tema apa yang aktif.
+ */
+[data-theme='dark'] {
+  --background: #0f1418;
+  --foreground: #e6edf0;
+  --card: #182026;
+  --card-foreground: #e6edf0;
+  --muted: #1d262c;
+  /* kontras ≥ 4.5:1 terhadap background gelap */
+  --muted-foreground: #9aa9b1;
+  --primary: #e6edf0;
+  --primary-foreground: #0f1418;
+  /* merah pensil dicerahkan supaya tetap terbaca di latar gelap */
+  --grease: #ff5c70;
+  --film: #e3a24a;
+  --destructive: #ff5c70;
+  --success: #4cc28c;
+  --border: #2a343b;
+  --ring: #ff5c70;
+  --strip: #060809;
+  --overlay: #06090b;
+  --overlay-foreground: #e6edf0;
+  --glow: #18212a;
+  color-scheme: dark;
+}
+
+/* Varian `dark:` mengikuti atribut data-theme, bukan media query OS. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -43,6 +84,9 @@
   --color-success: var(--success);
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-strip: var(--strip);
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
 
   --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Big Shoulders Variable', 'Arial Narrow', sans-serif;
@@ -59,7 +103,8 @@ html {
 
 body {
   /* cahaya dari bawah meja: sedikit lebih terang di tengah */
-  background: radial-gradient(120% 80% at 50% 35%, #f1f5f6 0%, transparent 60%), var(--background);
+  background:
+    radial-gradient(120% 80% at 50% 35%, var(--glow) 0%, transparent 60%), var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   font-feature-settings: 'ss01', 'tnum';
